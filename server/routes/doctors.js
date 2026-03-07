@@ -6,12 +6,9 @@ const User = require('../models/User');
 // Get all doctors with user info
 router.get('/', async (req, res) => {
     try {
-        console.log('📋 Fetching all doctors...');
         const doctors = await Doctor.find().populate('userId', 'name email phone');
-        console.log(`✅ Found ${doctors.length} doctors`);
         res.json(doctors);
     } catch (err) {
-        console.error('❌ Error fetching doctors:', err.message);
         res.status(500).json({ error: err.message });
     }
 });
@@ -27,6 +24,21 @@ router.post('/', async (req, res) => {
         await User.findByIdAndUpdate(userId, { role: 'doctor' });
 
         res.status(201).json(newDoctor);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Update a doctor profile
+router.put('/:id', async (req, res) => {
+    try {
+        const { specialization, experience, feesPerConsultation, availableSlots } = req.body;
+        const updatedDoctor = await Doctor.findByIdAndUpdate(
+            req.params.id, 
+            { specialization, experience, feesPerConsultation, availableSlots }, 
+            { new: true }
+        );
+        res.json(updatedDoctor);
     } catch (err) {
         res.status(500).json({ error: err.message });
     }

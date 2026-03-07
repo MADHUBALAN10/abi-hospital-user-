@@ -1,36 +1,65 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
-import { FaUser, FaLock, FaHospital, FaArrowRight, FaEnvelope, FaShieldAlt } from 'react-icons/fa';
+import { FaUser, FaLock, FaHospital, FaArrowRight, FaEnvelope, FaShieldAlt, FaGoogle } from 'react-icons/fa';
+import axios from 'axios';
+import { useGoogleLogin } from '@react-oauth/google';
 
 const Login = () => {
     const [isRegister, setIsRegister] = useState(false);
     const [role, setRole] = useState('patient');
-    const [formData, setFormData] = useState({ name: '', email: '', password: '', phone: '' });
+    const [formData, setFormData] = useState({ name: '', email: '', password: '', confirmPassword: '', phone: '' });
     const navigate = useNavigate();
 
     const handleChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
 
+    const handleGoogleLogin = useGoogleLogin({
+        onSuccess: async (tokenResponse) => {
+            try {
+                const res = await axios.post('http://localhost:5000/api/auth/google', {
+                    access_token: tokenResponse.access_token
+                });
+                const user = res.data;
+                localStorage.setItem('user', JSON.stringify(user));
+                setTimeout(() => {
+                    if (user.role === 'doctor') {
+                        navigate('/doctor');
+                    } else if (user.role === 'admin') {
+                        window.location.href = 'http://localhost:3000/';
+                    } else {
+                        navigate('/patient');
+                    }
+                }, 800);
+            } catch (error) {
+                toast.error(error.response?.data?.error || 'Failed to authenticate with Google Server');
+            }
+        },
+        onError: () => {
+            toast.error('Google authorization popup failed or was closed.');
+        }
+    });
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            // Generate a valid MongoDB ObjectId format (24 hex characters)
-            const generateObjectId = () => {
-                const timestamp = Math.floor(Date.now() / 1000).toString(16).padStart(8, '0');
-                const randomHex = () => Math.floor(Math.random() * 16777215).toString(16).padStart(6, '0');
-                return timestamp + randomHex() + randomHex() + randomHex().substring(0, 2);
-            };
+            if (isRegister && formData.password !== formData.confirmPassword) {
+                toast.error('Passwords do not match');
+                return;
+            }
 
-            const mockUser = {
-                name: formData.name || 'User',
-                email: formData.email,
-                role: role,
-                _id: generateObjectId()
-            };
+            const endpoint = isRegister
+                ? 'http://localhost:5000/api/auth/register'
+                : 'http://localhost:5000/api/auth/login';
 
-            if (!isRegister && formData.email.includes('admin')) mockUser.role = 'admin';
+            const payload = isRegister
+                ? { name: formData.name, email: formData.email, password: formData.password, role }
+                : { email: formData.email, password: formData.password };
 
-            localStorage.setItem('user', JSON.stringify(mockUser));
+            const res = await axios.post(endpoint, payload);
+            const user = res.data;
+
+            localStorage.setItem('user', JSON.stringify(user));
+
             toast.success(isRegister ? 'Welcome to MediCare+!' : 'Welcome Back!', {
                 duration: 3000,
                 position: 'top-center',
@@ -44,12 +73,17 @@ const Login = () => {
             });
 
             setTimeout(() => {
-                if (mockUser.role === 'admin') navigate('/admin');
-                else navigate('/patient');
+                if (user.role === 'doctor') {
+                    navigate('/doctor');
+                } else if (user.role === 'admin') {
+                    window.location.href = 'http://localhost:3000/';
+                } else {
+                    navigate('/patient');
+                }
             }, 800);
 
         } catch (error) {
-            toast.error('Something went wrong');
+            toast.error(error.response?.data?.error || 'Something went wrong');
         }
     };
 
@@ -197,7 +231,7 @@ const Login = () => {
                         </p>
                     </div>
 
-                    {/* Role Selector */}
+                    {/* Role Selector shown during Register */}
                     {isRegister && (
                         <div style={{
                             display: 'flex',
@@ -207,7 +241,7 @@ const Login = () => {
                             borderRadius: '12px',
                             marginBottom: '2rem'
                         }}>
-                            {['patient', 'admin'].map((r) => (
+                            {['patient', 'doctor'].map((r) => (
                                 <button
                                     key={r}
                                     type="button"
@@ -230,6 +264,49 @@ const Login = () => {
                                     {r}
                                 </button>
                             ))}
+                        </div>
+                    )}
+
+                    {/* Google Sign-In Button */}
+                    {!isRegister && (
+                        <button
+                            type="button"
+                            onClick={() => handleGoogleLogin()}
+                            style={{
+                                width: '100%',
+                                padding: '1rem',
+                                background: 'white',
+                                border: '2px solid #e2e8f0',
+                                borderRadius: '12px',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                gap: '0.75rem',
+                                cursor: 'pointer',
+                                marginBottom: '1.5rem',
+                                fontSize: '1rem',
+                                fontWeight: '600',
+                                color: '#0f172a',
+                                transition: 'all 0.2s'
+                            }}
+                            onMouseEnter={(e) => e.currentTarget.style.borderColor = '#0891b2'}
+                            onMouseLeave={(e) => e.currentTarget.style.borderColor = '#e2e8f0'}
+                        >
+                            <FaGoogle style={{ color: '#ea4335', fontSize: '1.25rem' }} />
+                            Continue with Google
+                        </button>
+                    )}
+
+                    {!isRegister && (
+                        <div style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '1rem',
+                            marginBottom: '1.5rem'
+                        }}>
+                            <div style={{ flex: 1, height: '1px', background: '#e2e8f0' }}></div>
+                            <span style={{ color: '#94a3b8', fontSize: '0.875rem' }}>or</span>
+                            <div style={{ flex: 1, height: '1px', background: '#e2e8f0' }}></div>
                         </div>
                     )}
 
@@ -296,6 +373,28 @@ const Login = () => {
                                 required
                             />
                         </div>
+
+                        {isRegister && (
+                            <div style={{ position: 'relative' }}>
+                                <FaLock style={{
+                                    position: 'absolute',
+                                    left: '1rem',
+                                    top: '50%',
+                                    transform: 'translateY(-50%)',
+                                    color: '#94a3b8',
+                                    zIndex: 1
+                                }} />
+                                <input
+                                    type="password"
+                                    name="confirmPassword"
+                                    placeholder="Confirm Password"
+                                    className="input"
+                                    style={{ paddingLeft: '3rem' }}
+                                    onChange={handleChange}
+                                    required
+                                />
+                            </div>
+                        )}
 
                         <button type="submit" className="btn btn-primary" style={{
                             width: '100%',
