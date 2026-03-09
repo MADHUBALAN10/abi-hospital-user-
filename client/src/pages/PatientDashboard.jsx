@@ -100,15 +100,17 @@ const PatientDashboard = () => {
                 avatar: doc.userId?.name?.[0] + (doc.userId?.name?.split(' ')[1]?.[0] || ''),
                 color: ['#667eea', '#48bb78', '#f6ad55', '#4299e1', '#ed8936'][i % 5],
                 experience: doc.experience,
-                patients: 100 + (i * 20)
+                patients: 100 + (i * 20),
+                profileImage: doc.profileImage || null,
+                gender: doc.gender || '',
             })));
         } catch (error) {
             console.error('Error fetching doctors:', error);
             setDoctors([
-                { id: '1', name: 'Dr. Sarah Johnson', specialty: 'Cardiologist', rating: 4.9, fee: 200, avatar: 'SJ', color: '#667eea', experience: 10, patients: 234 },
-                { id: '2', name: 'Dr. Michael Chen', specialty: 'Dermatologist', rating: 4.8, fee: 150, avatar: 'MC', color: '#48bb78', experience: 8, patients: 189 },
-                { id: '3', name: 'Dr. Emily Davis', specialty: 'Pediatrician', rating: 5.0, fee: 180, avatar: 'ED', color: '#f6ad55', experience: 12, patients: 312 },
-                { id: '4', name: 'Dr. James Wilson', specialty: 'Neurologist', rating: 4.7, fee: 220, avatar: 'JW', color: '#4299e1', experience: 15, patients: 267 },
+                { id: '1', name: 'Dr. Sarah Johnson', specialty: 'Cardiologist', rating: 4.9, fee: 800, avatar: 'SJ', color: '#667eea', experience: 10, patients: 234, profileImage: null },
+                { id: '2', name: 'Dr. Michael Chen', specialty: 'Dermatologist', rating: 4.8, fee: 600, avatar: 'MC', color: '#48bb78', experience: 8, patients: 189, profileImage: null },
+                { id: '3', name: 'Dr. Emily Davis', specialty: 'Pediatrician', rating: 5.0, fee: 700, avatar: 'ED', color: '#f6ad55', experience: 12, patients: 312, profileImage: null },
+                { id: '4', name: 'Dr. James Wilson', specialty: 'Neurologist', rating: 4.7, fee: 900, avatar: 'JW', color: '#4299e1', experience: 15, patients: 267, profileImage: null },
             ]);
         }
     };
@@ -606,20 +608,24 @@ const PatientDashboard = () => {
                                             }}
                                         >
                                             <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1.5rem' }}>
+                                                {/* Show actual profile image if available */}
                                                 <div style={{
-                                                    width: '70px',
-                                                    height: '70px',
-                                                    background: `linear-gradient(135deg, ${doctor.color}, ${doctor.color}dd)`,
+                                                    width: '70px', height: '70px',
                                                     borderRadius: '16px',
-                                                    display: 'flex',
-                                                    alignItems: 'center',
-                                                    justifyContent: 'center',
-                                                    color: 'white',
-                                                    fontSize: '1.5rem',
-                                                    fontWeight: '800',
-                                                    boxShadow: `0 10px 30px ${doctor.color}40`
+                                                    overflow: 'hidden',
+                                                    boxShadow: `0 10px 30px ${doctor.color}40`,
+                                                    flexShrink: 0,
                                                 }}>
-                                                    {doctor.avatar}
+                                                    {doctor.profileImage ? (
+                                                        <img src={doctor.profileImage} alt={doctor.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                                                    ) : (
+                                                        <div style={{
+                                                            width: '100%', height: '100%',
+                                                            background: `linear-gradient(135deg, ${doctor.color}, ${doctor.color}dd)`,
+                                                            display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                                            color: 'white', fontSize: '1.5rem', fontWeight: '800'
+                                                        }}>{doctor.avatar}</div>
+                                                    )}
                                                 </div>
                                                 <div style={{ flex: 1 }}>
                                                     <h3 style={{ fontSize: '1.25rem', fontWeight: '800', color: '#1e293b', marginBottom: '0.25rem' }}>
@@ -679,7 +685,7 @@ const PatientDashboard = () => {
                                                         Consultation Fee
                                                     </p>
                                                     <p style={{ fontSize: '1.5rem', fontWeight: '800', color: doctor.color }}>
-                                                        ${doctor.fee}
+                                                        ₹{doctor.fee?.toLocaleString('en-IN')}
                                                     </p>
                                                 </div>
                                                 <button style={{
@@ -834,7 +840,7 @@ const PatientDashboard = () => {
                                         </div>
                                         <div style={{ display: 'flex', justifyContent: 'space-between', paddingTop: '1rem', borderTop: '2px solid #bae6fd' }}>
                                             <span style={{ color: '#475569', fontWeight: '700', fontSize: '1.125rem' }}>Consultation Fee:</span>
-                                            <span style={{ fontWeight: '800', color: selectedDoctor.color, fontSize: '1.5rem' }}>${selectedDoctor.fee}</span>
+                                            <span style={{ fontWeight: '800', color: selectedDoctor.color, fontSize: '1.5rem' }}>?{selectedDoctor.fee?.toLocaleString('en-IN')}</span>
                                         </div>
                                     </div>
                                 )}

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import {
     FaUserMd, FaPills, FaMoneyBillWave, FaWhatsapp,
-    FaChartPie, FaSignOutAlt, FaBell,
+    FaChartPie, FaSignOutAlt, FaBell, FaUserNurse,
 } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
@@ -19,6 +19,7 @@ import MedicalStock from './sections/MedicalStock';
 import Payments from './sections/Payments';
 import DoctorsTeam from './sections/DoctorsTeam';
 import WhatsAppConfig from './sections/WhatsAppConfig';
+import NursesTeam from './sections/NursesTeam';
 
 const API_URL = 'http://localhost:5000/api';
 
@@ -29,6 +30,7 @@ const AdminDashboard = () => {
     const [appointments, setAppointments] = useState([]);
     const [inventory, setInventory] = useState([]);
     const [doctors, setDoctors] = useState([]);
+    const [nurses, setNurses] = useState([]);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -39,12 +41,14 @@ const AdminDashboard = () => {
     const fetchData = async () => {
         setLoading(true);
         try {
-            const [apptRes, docRes] = await Promise.all([
+            const [apptRes, docRes, nurseRes] = await Promise.all([
                 axios.get(`${API_URL}/appointments`),
                 axios.get(`${API_URL}/doctors`),
+                axios.get(`${API_URL}/nurses`),
             ]);
             setAppointments(apptRes.data);
             setDoctors(docRes.data);
+            setNurses(nurseRes.data);
 
             if (activeTab === 'stock') {
                 const invRes = await axios.get(`${API_URL}/inventory`);
@@ -96,18 +100,23 @@ const AdminDashboard = () => {
         toast.success('Logged out successfully');
     };
 
-    const handleAddInventory = async () => {
+    const handleAddInventory = async (formData) => {
         try {
-            const res = await axios.post(`${API_URL}/inventory`, {
-                itemName: 'New Medicine',
-                category: 'Medicine',
-                stockQuantity: 100,
-                unitPrice: 10,
-            });
+            const res = await axios.post(`${API_URL}/inventory`, formData);
             setInventory([...inventory, res.data]);
             toast.success('Item added successfully');
         } catch {
             toast.error('Failed to add item');
+        }
+    };
+
+    const handleEditInventory = async (id, formData) => {
+        try {
+            const res = await axios.put(`${API_URL}/inventory/${id}`, formData);
+            setInventory(inventory.map((item) => item._id === id ? res.data : item));
+            toast.success('Item updated successfully');
+        } catch {
+            toast.error('Failed to update item');
         }
     };
 
@@ -125,6 +134,7 @@ const AdminDashboard = () => {
     const navItems = [
         { id: 'overview', icon: <FaChartPie />, label: 'Dashboard', badge: stats.appointments > 0 ? stats.appointments : null },
         { id: 'doctors', icon: <FaUserMd />, label: 'Doctors', count: stats.doctors },
+        { id: 'nurses', icon: <FaUserNurse />, label: 'Nurses', count: nurses.length },
         { id: 'stock', icon: <FaPills />, label: 'Inventory' },
         { id: 'payments', icon: <FaMoneyBillWave />, label: 'Payments' },
     ];
@@ -141,9 +151,10 @@ const AdminDashboard = () => {
         }
         switch (activeTab) {
             case 'overview': return <Overview stats={stats} appointments={appointments} />;
-            case 'stock': return <MedicalStock inventory={inventory} onAdd={handleAddInventory} onDelete={handleDeleteInventory} />;
+            case 'stock': return <MedicalStock inventory={inventory} doctors={doctors} onAdd={handleAddInventory} onEdit={handleEditInventory} onDelete={handleDeleteInventory} />;
             case 'payments': return <Payments appointments={appointments} stats={stats} />;
             case 'doctors': return <DoctorsTeam doctors={doctors} onRefresh={fetchData} />;
+            case 'nurses': return <NursesTeam nurses={nurses} onRefresh={fetchData} />;
             case 'whatsapp': return <WhatsAppConfig />;
             default: return null;
         }
@@ -197,7 +208,7 @@ const AdminDashboard = () => {
                 {/* Header */}
                 <header className="admin-header">
                     <div>
-                        <h1>{activeTab === 'overview' ? 'Dashboard Overview' : activeTab}</h1>
+                        <h1>{activeTab === 'overview' ? 'Dashboard Overview' : activeTab === 'nurses' ? 'Nursing Staff' : activeTab === 'doctors' ? 'Doctors Team' : activeTab}</h1>
                         <p className="admin-header-date">
                             {new Date().toLocaleDateString('en-US', {
                                 weekday: 'long', year: 'numeric', month: 'long', day: 'numeric',

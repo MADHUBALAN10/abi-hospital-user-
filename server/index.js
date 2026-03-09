@@ -6,7 +6,8 @@ const cors = require('cors');
 const app = express();
 
 // Middleware
-app.use(express.json());
+app.use(express.json({ limit: '10mb' }));
+app.use(express.urlencoded({ limit: '10mb', extended: true }));
 app.use(cors());
 
 // Welcome Route
@@ -50,12 +51,14 @@ const authRoutes = require('./routes/auth');
 const doctorRoutes = require('./routes/doctors');
 const appointmentRoutes = require('./routes/appointments');
 const inventoryRoutes = require('./routes/inventory');
+const nurseRoutes = require('./routes/nurses');
 
 // Routes (Mounting)
 app.use('/api/auth', authRoutes);
 app.use('/api/doctors', doctorRoutes);
 app.use('/api/appointments', appointmentRoutes);
 app.use('/api/inventory', inventoryRoutes);
+app.use('/api/nurses', nurseRoutes);
 
 // 404 Handler
 app.use((req, res) => {

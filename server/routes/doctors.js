@@ -16,8 +16,8 @@ router.get('/', async (req, res) => {
 // Add a doctor profile (Admin only ideally)
 router.post('/', async (req, res) => {
     try {
-        const { userId, specialization, experience, feesPerConsultation, availableSlots } = req.body;
-        const newDoctor = new Doctor({ userId, specialization, experience, feesPerConsultation, availableSlots });
+        const { userId, specialization, experience, feesPerConsultation, gender, profileImage, availableSlots } = req.body;
+        const newDoctor = new Doctor({ userId, specialization, experience, feesPerConsultation, gender, profileImage, availableSlots });
         await newDoctor.save();
 
         // Update user role to doctor
@@ -32,12 +32,21 @@ router.post('/', async (req, res) => {
 // Update a doctor profile
 router.put('/:id', async (req, res) => {
     try {
-        const { specialization, experience, feesPerConsultation, availableSlots } = req.body;
+        const { name, specialization, experience, feesPerConsultation, gender, profileImage, availableSlots } = req.body;
+        
+        let doctor = await Doctor.findById(req.params.id);
+        if (!doctor) return res.status(404).json({ error: 'Doctor not found' });
+
+        if (name) {
+            await User.findByIdAndUpdate(doctor.userId, { name });
+        }
+
         const updatedDoctor = await Doctor.findByIdAndUpdate(
             req.params.id, 
-            { specialization, experience, feesPerConsultation, availableSlots }, 
+            { specialization, experience, feesPerConsultation, gender, profileImage, availableSlots }, 
             { new: true }
-        );
+        ).populate('userId', 'name email phone');
+        
         res.json(updatedDoctor);
     } catch (err) {
         res.status(500).json({ error: err.message });

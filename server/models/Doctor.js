@@ -10,7 +10,9 @@ const doctorSchema = new mongoose.Schema({
         startTime: String, // "10:00"
         endTime: String // "14:00"
     }],
-    rating: { type: Number, default: 0 }
+    rating: { type: Number, default: 0 },
+    gender: { type: String },
+    profileImage: { type: String }
 });
 
 module.exports = mongoose.model('Doctor', doctorSchema);

@@ -1,4 +1,4 @@
-/* ============================================================
+﻿/* ============================================================
    Admin Panel — Dedicated Styles
    ============================================================ */
 
@@ -671,18 +671,42 @@
     animation: adminFadeIn 0.2s ease-out;
 }
 
+@keyframes adminFadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+@keyframes adminSlideUp {
+    from { opacity: 0; transform: translateY(24px) scale(0.97); }
+    to   { opacity: 1; transform: translateY(0)     scale(1);    }
+}
+
 .admin-modal {
-    background: rgba(255, 255, 255, 0.95);
+    background: rgba(255, 255, 255, 0.98);
     backdrop-filter: blur(20px);
     border: 1px solid rgba(255, 255, 255, 0.8);
-    border-radius: 20px;
+    border-radius: 24px;
     padding: 2.5rem;
-    max-width: 600px;
-    width: 90%;
-    max-height: 90vh;
+    max-width: 560px;
+    width: 94%;
+    max-height: 92vh;
     overflow-y: auto;
-    animation: adminSlideUp 0.3s ease-out;
-    box-shadow: 0 24px 64px rgba(0, 0, 0, 0.15);
+    animation: adminSlideUp 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    box-shadow: 0 32px 80px rgba(0, 0, 0, 0.18);
+}
+
+/* inventory modal pill icon */
+.inv-modal-icon {
+    width: 56px;
+    height: 56px;
+    background: linear-gradient(135deg, #0891b2, #06b6d4);
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.5rem;
+    box-shadow: 0 6px 20px rgba(8, 145, 178, 0.35);
 }
 
 .admin-modal-header {
@@ -774,6 +798,297 @@
     font-size: 1rem;
 }
 
+/* -- Doctor Profile Edit Modal */
+.dp-profile-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 1.25rem;
+    flex: 1;
+}
+
+.dp-avatar-wrapper {
+    position: relative;
+    flex-shrink: 0;
+}
+
+.dp-avatar-img {
+    width: 80px;
+    height: 80px;
+    border-radius: 18px;
+    object-fit: cover;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+    display: block;
+}
+
+.dp-avatar-initial {
+    width: 80px;
+    height: 80px;
+    border-radius: 18px;
+    background: linear-gradient(135deg, #0891b2, #06b6d4);
+    color: white;
+    font-size: 2rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 6px 16px rgba(8,145,178,0.25);
+}
+
+.dp-avatar-upload-btn {
+    position: absolute;
+    bottom: -8px;
+    right: -8px;
+    background: #0891b2;
+    color: white;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(8,145,178,0.4);
+    transition: background 0.2s, transform 0.2s;
+}
+
+.dp-avatar-upload-btn:hover {
+    background: #0e7490;
+    transform: scale(1.1);
+}
+
+.dp-name-col {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding-top: 0.25rem;
+}
+
+.dp-name-input {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0.55rem 0.85rem;
+    border-radius: 10px;
+    border: 1.5px solid #cbd5e1;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #0f172a;
+    outline: none;
+    background: #f8fafc;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.dp-name-input:focus {
+    border-color: #0891b2;
+    box-shadow: 0 0 0 3px rgba(8,145,178,0.1);
+    background: white;
+}
+
+.dp-select {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0.45rem 0.85rem;
+    border-radius: 10px;
+    border: 1.5px solid #cbd5e1;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #334155;
+    outline: none;
+    background: white;
+    cursor: pointer;
+    transition: border-color 0.2s;
+}
+
+.dp-select:focus {
+    border-color: #0891b2;
+    box-shadow: 0 0 0 3px rgba(8,145,178,0.1);
+}
+
+.dp-section-label {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 1rem;
+    margin-bottom: 0.25rem;
+}
+
+.dp-section-label h4 {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 700;
+    color: #0f172a;
+}
+
+.dp-edit-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.35rem 0.9rem;
+    border-radius: 8px;
+    border: 1.5px solid #e2e8f0;
+    background: #f8fafc;
+    color: #0891b2;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.dp-edit-btn:hover {
+    background: #e0f2fe;
+    border-color: #bae6fd;
+}
+
+.dp-info-card {
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 14px;
+    padding: 1.1rem 1.25rem;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+}
+
+.dp-info-card-row {
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 14px;
+    padding: 1.1rem 1.25rem;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+    display: flex;
+    gap: 2rem;
+}
+
+.dp-info-card-row > div {
+    flex: 1;
+}
+
+.dp-info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+.dp-field-label {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: #64748b;
+    margin: 0 0 0.45rem 0;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.dp-field-value {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #0f172a;
+}
+
+.dp-field-value.accent {
+    color: #0891b2;
+    font-size: 1.1rem;
+}
+
+.dp-field-input {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0.55rem 0.85rem;
+    border-radius: 10px;
+    border: 1.5px solid #cbd5e1;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: #0f172a;
+    outline: none;
+    background: #f8fafc;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.dp-field-input:focus {
+    border-color: #0891b2;
+    box-shadow: 0 0 0 3px rgba(8,145,178,0.1);
+    background: white;
+}
+
+.dp-field-input.accent-input {
+    color: #0891b2;
+}
+
+.dp-action-row {
+    display: flex;
+    gap: 0.875rem;
+    margin-top: 0.5rem;
+}
+
+.dp-btn-cancel {
+    flex: 1;
+    padding: 0.75rem 1rem;
+    border-radius: 10px;
+    border: 1.5px solid #e2e8f0;
+    background: white;
+    color: #64748b;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.dp-btn-cancel:hover {
+    background: #f1f5f9;
+    border-color: #cbd5e1;
+}
+
+.dp-btn-save {
+    flex: 2;
+    padding: 0.75rem 1rem;
+    border-radius: 10px;
+    border: none;
+    background: linear-gradient(135deg, #0891b2, #06b6d4);
+    color: white;
+    font-size: 0.9375rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 4px 14px rgba(8,145,178,0.3);
+}
+
+.dp-btn-save:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(8,145,178,0.4);
+}
+
+.dp-btn-save:disabled {
+    opacity: 0.65;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.dp-available-strip {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    padding: 1rem 1.25rem;
+    background: #f0fdf4;
+    border: 1px solid #bbf7d0;
+    border-radius: 12px;
+    margin-top: 0.5rem;
+}
+
+.dp-available-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #10b981;
+    flex-shrink: 0;
+}
+
+.dp-available-strip p {
+    margin: 0;
+    font-weight: 600;
+    color: #065f46;
+    font-size: 0.9rem;
+}
 /* ── Payments ───────────────────────────────────────────── */
 .admin-payments-grid {
     display: grid;
@@ -1006,3 +1321,110 @@
         grid-template-columns: 1fr;
     }
 }
+
+/* ── Inventory: Doctor Chips ────────────────────────────── */
+.inv-doctor-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 0.75rem;
+}
+
+.inv-doctor-chip {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 0.875rem 0.5rem 0.5rem;
+    border: 2px solid #e5e7eb;
+    border-radius: 40px;
+    background: #f8fafc;
+    cursor: pointer;
+    transition: all 0.18s;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: #334155;
+}
+
+.inv-doctor-chip:hover {
+    border-color: #0891b2;
+    background: #e0f2fe;
+    color: #0891b2;
+}
+
+.inv-doctor-chip.selected {
+    border-color: #0891b2;
+    background: linear-gradient(135deg, #e0f2fe, #bae6fd);
+    color: #0c4a6e;
+    box-shadow: 0 2px 8px rgba(8, 145, 178, 0.2);
+}
+
+.inv-dc-avatar {
+    width: 28px;
+    height: 28px;
+    background: linear-gradient(135deg, #0891b2, #06b6d4);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 700;
+    font-size: 0.75rem;
+    flex-shrink: 0;
+}
+
+.inv-dc-info {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.2;
+}
+
+.inv-dc-name {
+    font-weight: 600;
+    font-size: 0.8125rem;
+}
+
+.inv-dc-spec {
+    font-size: 0.7rem;
+    color: #94a3b8;
+}
+
+.inv-dc-check {
+    margin-left: 0.25rem;
+    color: #0891b2;
+    font-weight: 700;
+    font-size: 0.9rem;
+}
+
+/* ── Inventory: Category Badge ──────────────────────────── */
+.inv-category-badge {
+    padding: 0.375rem 0.75rem;
+    background: #f1f5f9;
+    border-radius: 8px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #475569;
+}
+
+/* ── Inventory: Assigned Doctor Cell ────────────────────── */
+.inv-assigned-doc {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #0891b2;
+}
+
+.inv-doc-dot {
+    width: 8px;
+    height: 8px;
+    background: #06b6d4;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+/* ── Inventory: Edit modal icon variant ─────────────────── */
+.inv-modal-icon-edit {
+    background: linear-gradient(135deg, #7c3aed, #8b5cf6) !important;
+    box-shadow: 0 6px 20px rgba(124, 58, 237, 0.35) !important;
+}
