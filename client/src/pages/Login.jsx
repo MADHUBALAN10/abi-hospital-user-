@@ -25,7 +25,7 @@ const Login = () => {
                     if (user.role === 'doctor') {
                         navigate('/doctor');
                     } else if (user.role === 'admin') {
-                        window.location.href = 'http://localhost:3000/';
+                        window.location.href = 'https://abi-hospital-admin.vercel.app/';
                     } else {
                         navigate('/patient');
                     }
@@ -76,7 +76,7 @@ const Login = () => {
                 if (user.role === 'doctor') {
                     navigate('/doctor');
                 } else if (user.role === 'admin') {
-                    window.location.href = 'http://localhost:3000/';
+                    window.location.href = 'https://abi-hospital-admin.vercel.app/';
                 } else {
                     navigate('/patient');
                 }
