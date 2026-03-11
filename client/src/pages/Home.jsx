@@ -267,11 +267,15 @@ const SliderStyle = () => (
         .whatsapp-float:hover { transform: scale(1.1); }
 
         @media (max-width: 1024px) {
-            .gem-nav-links { display: none; }
+            .gem-nav-links, .gem-desktop-action { display: none !important; }
+            .gem-nav-logo-text { font-size: 1.4rem; }
             .gem-hamburger { display: flex; align-items: center; justify-content: center; }
             .gem-hero-h1 { font-size: 2.2rem; }
             .gem-hero-h1 span { font-size: 1.5rem; }
             .gem-hero-list li { font-size: 1rem; }
+            .gem-hero-actions { flex-direction: column; width: 100%; }
+            .gem-hero-btn-primary, .gem-hero-btn-outline { width: 100%; justify-content: center; text-align: center; }
+            .gem-nav { padding: 10px 15px; }
         }
 
         /* Vision / Mission / Quality Policy */
@@ -618,8 +622,8 @@ const Home = () => {
 
                     {/* Right Action Buttons */}
                     <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                        <Link to="/login" className="gem-login-btn">Login</Link>
-                        <Link to="/login" className="gem-btn">Book Appointment</Link>
+                        <Link to="/login" className="gem-login-btn gem-desktop-action">Login</Link>
+                        <Link to="/login" className="gem-btn gem-desktop-action">Book Appointment</Link>
                         {/* Hamburger for mobile */}
                         <button className="gem-hamburger" onClick={() => setMobileMenuOpen(o => !o)} aria-label="Toggle menu">
                             {mobileMenuOpen ? <FaTimes size={24} /> : <FaBars size={24} />}

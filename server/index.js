@@ -12,15 +12,22 @@ app.use(cors());
 
 // Welcome Route
 app.get('/', (req, res) => {
+    const fullUrl = req.protocol + '://' + req.get('host');
     res.json({
         message: '🏥 MediCare+ Hospital Management System API',
         status: 'running',
         version: '1.0.0',
+        frontends: {
+            client: 'https://abihospital.netlify.app',
+            admin: 'https://abi-hospital-admin.vercel.app/'
+        },
         endpoints: {
-            auth: '/api/auth',
-            doctors: '/api/doctors',
-            appointments: '/api/appointments',
-            inventory: '/api/inventory'
+            auth: `${fullUrl}/api/auth`,
+            doctors: `${fullUrl}/api/doctors`,
+            appointments: `${fullUrl}/api/appointments`,
+            inventory: `${fullUrl}/api/inventory`,
+            nurses: `${fullUrl}/api/nurses`,
+            payment: `${fullUrl}/api/payment`,
         }
     });
 });
