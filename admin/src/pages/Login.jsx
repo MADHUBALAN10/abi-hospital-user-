@@ -4,6 +4,8 @@ import toast from 'react-hot-toast';
 import { FaUser, FaLock, FaHospital, FaArrowRight, FaEnvelope, FaShieldAlt } from 'react-icons/fa';
 import axios from 'axios';
 
+const API_URL = import.meta.env.MODE === 'development' ? 'http://localhost:4000/api' : 'https://abi-hospital-backend.onrender.com/api';
+
 const Login = () => {
     const [role, setRole] = useState('admin');
     const [formData, setFormData] = useState({ name: '', email: 'admin@gmail.com', password: 'admin', phone: '' });
@@ -15,7 +17,7 @@ const Login = () => {
         e.preventDefault();
         try {
             // Option 1: First try logging into the real backend 
-            const res = await axios.post('https://abi-hospital-backend.onrender.com/api/auth/login', {
+            const res = await axios.post(`${API_URL}/auth/login`, {
                 email: formData.email,
                 password: formData.password
             });

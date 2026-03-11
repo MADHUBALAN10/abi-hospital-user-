@@ -3,7 +3,7 @@ import { FaPlus } from 'react-icons/fa';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 
-const API_URL = 'https://abi-hospital-backend.onrender.com/api';
+const API_URL = import.meta.env.MODE === 'development' ? 'http://localhost:4000/api' : 'https://abi-hospital-backend.onrender.com/api';
 
 const DOCTOR_AVATARS = [
     'linear-gradient(135deg, #0891b2, #06b6d4)',

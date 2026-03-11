@@ -8,7 +8,7 @@ import {
 import axios from 'axios';
 import heroBgVideo from '../assets/Abhi_sk_hospital_gobi_720P.mp4';
 
-const API_URL = 'https://abi-hospital-backend.onrender.com/api';
+const API_URL = import.meta.env.MODE === 'development' ? 'http://localhost:4000/api' : 'https://abi-hospital-backend.onrender.com/api';
 const COLORS   = ['#0891b2','#8b5cf6','#10b981','#f59e0b','#ec4899','#3b82f6'];
 
 /* ── Demo awards pool ── */

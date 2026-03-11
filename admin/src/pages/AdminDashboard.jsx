@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import axios from 'axios';
 
-const API_URL = 'https://abi-hospital-backend.onrender.com/api';
+const API_URL = import.meta.env.MODE === 'development' ? 'http://localhost:4000/api' : 'https://abi-hospital-backend.onrender.com/api';
 
 const AdminDashboard = () => {
     const [activeTab, setActiveTab] = useState('overview');
@@ -1263,7 +1263,7 @@ const DoctorProfileView = ({ doctor, onBack, onRefresh }) => {
         e.preventDefault();
         setSaving(true);
         try {
-            await axios.put(`https://abi-hospital-backend.onrender.com/api/doctors/${doctor._id}`, {
+            await axios.put(`${API_URL}/doctors/${doctor._id}`, {
                 specialization: formData.specialization,
                 experience: parseInt(formData.experience),
                 feesPerConsultation: parseInt(formData.feesPerConsultation)
