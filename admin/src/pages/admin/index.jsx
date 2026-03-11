@@ -21,7 +21,7 @@ import DoctorsTeam from './sections/DoctorsTeam';
 import WhatsAppConfig from './sections/WhatsAppConfig';
 import NursesTeam from './sections/NursesTeam';
 
-const API_URL = 'http://localhost:5000/api';
+const API_URL = 'https://abi-hospital-backend.onrender.com/api';
 
 const AdminDashboard = () => {
     const [activeTab, setActiveTab] = useState('overview');

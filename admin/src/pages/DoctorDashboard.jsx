@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import axios from 'axios';
 
-const API_URL = 'http://localhost:5000/api';
+const API_URL = 'https://abi-hospital-backend.onrender.com/api';
 
 const DoctorDashboard = () => {
     const [activeTab, setActiveTab] = useState('appointments');

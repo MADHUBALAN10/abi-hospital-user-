@@ -16,7 +16,7 @@ const Login = () => {
     const handleGoogleLogin = useGoogleLogin({
         onSuccess: async (tokenResponse) => {
             try {
-                const res = await axios.post('http://localhost:5000/api/auth/google', {
+                const res = await axios.post('https://abi-hospital-backend.onrender.com/api/auth/google', {
                     access_token: tokenResponse.access_token
                 });
                 const user = res.data;
@@ -48,8 +48,8 @@ const Login = () => {
             }
 
             const endpoint = isRegister
-                ? 'http://localhost:5000/api/auth/register'
-                : 'http://localhost:5000/api/auth/login';
+                ? 'https://abi-hospital-backend.onrender.com/api/auth/register'
+                : 'https://abi-hospital-backend.onrender.com/api/auth/login';
 
             const payload = isRegister
                 ? { name: formData.name, email: formData.email, password: formData.password, role }

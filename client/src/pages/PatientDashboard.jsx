@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import toast, { Toaster } from 'react-hot-toast';
 import axios from 'axios';
 
-const API_URL = 'http://localhost:5000/api';
+const API_URL = 'https://abi-hospital-backend.onrender.com/api';
 
 /* ── Green-style Appointment Booking Form ── */
 const GreenBookingForm = ({ selectedDoctor, doctors, selectedDate, setSelectedDate, selectedSlot, setSelectedSlot, loading, handleBooking, onBack }) => {

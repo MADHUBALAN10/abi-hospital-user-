@@ -15,7 +15,7 @@ const Login = () => {
         e.preventDefault();
         try {
             // Option 1: First try logging into the real backend 
-            const res = await axios.post('http://localhost:5000/api/auth/login', {
+            const res = await axios.post('https://abi-hospital-backend.onrender.com/api/auth/login', {
                 email: formData.email,
                 password: formData.password
             });
